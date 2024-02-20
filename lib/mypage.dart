@@ -24,7 +24,7 @@ class Mypage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-                SizedBox(width: 13,),
+                SizedBox(width: 15,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -59,10 +59,10 @@ class Mypage extends StatelessWidget {
                     ),
                   ],
                 ),
-              SizedBox(width: 13,),
+              // SizedBox(width: 13,),
+              Spacer(flex: 2,),
               Column(
                 children: [
-                  // SizedBox(height: 20,),
                   Container(
                     width: 90,
                     height: 33,
@@ -91,7 +91,8 @@ class Mypage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(width: 10,),
+              // SizedBox(width: 10,),
+              Spacer(flex: 1,),
               Column(
                 children: [
                   Container(
@@ -122,12 +123,13 @@ class Mypage extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(width: 15,),
             ],
           ),
           SizedBox(height: 20,),
           Row(
             children: [
-              SizedBox(width: 13,),
+              SizedBox(width: 15,),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(260,33),
@@ -147,7 +149,8 @@ class Mypage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(width: 30,),
+              // SizedBox(width: 30,),
+              Spacer(),
 
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -165,6 +168,7 @@ class Mypage extends StatelessWidget {
                   ),
               )
               ),
+              SizedBox(width: 15,),
             ],
           ),
         SizedBox(height: 20,),
