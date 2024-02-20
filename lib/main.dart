@@ -64,7 +64,7 @@ class Root extends ConsumerWidget {
     final Pages = [
       const Sarch(),
       const Map(),
-      const Mypage(),
+      Mypage(),
     ];
 
     return Scaffold(
