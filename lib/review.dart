@@ -112,7 +112,7 @@ class SecondScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('写真'),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,//左上の戻るボタンを消す
       ),
       body: SingleChildScrollView(
         child: Column(
