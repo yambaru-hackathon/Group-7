@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
   final img = [
     "images/desk.png",
@@ -432,7 +433,9 @@ class Sarch extends StatelessWidget {
                         borderRadius: BorderRadius.circular(99),
                     ),
                   ),
-                onPressed: () { /* ボタンがタップされた時の処理 */ },
+                onPressed: () {
+                  openPhoneCall();
+                },
                 child: Row(
                   children: [
                     Icon(
@@ -499,6 +502,31 @@ class InstagramPostItem extends StatelessWidget {
       ),
     );
   }
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+void openPhoneCall() async {
+    final Uri callLaunchUri = Uri(
+      scheme: 'tel',
+      path: '117',
+    );
+
+    canLaunchUrl(callLaunchUri).then((value) {
+      if (value) {
+            launchUrl(callLaunchUri).then((value) {
+              print('launchUrl result: $value');
+            });
+      } else {
+            print('cannot call');
+      }
+    });
 }
 
 
