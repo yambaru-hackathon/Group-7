@@ -314,7 +314,7 @@ class Sarch extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  '400m 車20分 徒歩分',
+                                  '400m  徒歩20分',
                                   style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
