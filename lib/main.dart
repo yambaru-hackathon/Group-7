@@ -1,75 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'map.dart';
-import 'sarch.dart';
-import 'mypage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-
-main() {
-  //アプリ
-  const app = MaterialApp(home: Root());
-
-  //プロバイダースコープで囲む
-  const scope = ProviderScope(child: app);
-  runApp(scope);
+void main() {
+  runApp(MaterialApp(home: MyMap()));
 }
 
-//プロバイダー
-final indexProvider = StateProvider(
-  (ref) {
-    //変化するデータ　　0, 1, 2 ...
-    return 0;
-  },
-);
-
-//画面全体
-class Root extends ConsumerWidget {
-  const Root({super.key});
+class MyMap extends StatefulWidget {
+  const MyMap({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    //インデックス
-    final index = ref.watch(indexProvider);
+  State<MyMap> createState() => _MyMapState();
+}
 
-    //アイテムたち
-    const items = [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.search_rounded),
-        label: '見つける',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.map),
-        label: 'マップ',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.person),
-        label: 'マイページ',
-      ),
-    ];
-
-    //下のバー
-    final bar = BottomNavigationBar(
-      items: items,
-      backgroundColor: const Color.fromARGB(255, 255, 189, 128),
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.black,
-      currentIndex: index,
-      onTap: (index) {
-        ref.read(indexProvider.notifier).state = index;
-      },
-    );
-
-    // ignore: non_constant_identifier_names
-    final Pages = [
-      const Sarch(),
-      const Map(),
-      const Mypage(),
-    ];
-
+class _MyMapState extends State<MyMap> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Pages[index],
-      bottomNavigationBar: bar,
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition( //マップの初期位置を指定
+            zoom: 17,                         //ズーム
+            target: LatLng(35.0, 135.0),     //経度,緯度
+            tilt: 45.0,                     //上下の角度
+            bearing: 90.0),                //指定した角度だけ回転する
+      ),
     );
   }
 }
