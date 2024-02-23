@@ -21,15 +21,17 @@ class Sarch extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 25),
             Container(
-                  width: 393,
-                  height: 110,
-                  color: Colors.white,
-                  // child: FittedBox(
-                  //   fit: BoxFit.fitWidth,
-                  //   child: Image.asset('images/Kapel.png'),
-                  // ),
+                height: 150,
+                color: Colors.white,
+                child: ClipRect(
+                  child: Image.asset(
+                    'images/Kapsel.png',
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover, // 画像をはみ出した部分をカットして表示
+                  ),
+                ),
               ),
               SizedBox(height: 1,),
             Row(
