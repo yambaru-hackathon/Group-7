@@ -1,3 +1,4 @@
+import 'package:flutter_gyuukaku/review.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,13 @@ class Sarch extends StatelessWidget {
                       backgroundColor: const Color.fromARGB(255, 234, 234, 234),
                       elevation: 10,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      //押したときの動作
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Feedpage()),
+                      );
+                    },
                     child: Text(
                       'レビューを見る',
                       style: TextStyle(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gyuukaku/sarch.dart';
 
-void main(){
+void main() {
   runApp(Feedpage());
 }
 
@@ -26,12 +27,32 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
-            Text('Mr. Donut',
-               style: TextStyle(
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                size: 30,
+                color: Colors.blue,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Sarch()),
+                );
+              },
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'Mr. Donut',
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 40,
                   ),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             Row(
@@ -61,43 +82,40 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
-
             SizedBox(width: 50),
-              Align(alignment: Alignment.center,
+            Align(
+                alignment: Alignment.center,
                 child: Container(
                   width: 350,
                   height: 225,
                   color: Colors.white,
-                  child: Text('SNSで知った、東急池上線荏原中延駅前の、行列人気ラーメン店です。\n肉感たっぷりのロースチャーシューを使った、あっさりスープの醤油ラーメンが人気らしい。\n平日の13時過ぎ、１人でカウンター席を利用しました。',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize:18,
+                  child: Text(
+                    'SNSで知った、東急池上線荏原中延駅前の、行列人気ラーメン店です。\n肉感たっぷりのロースチャーシューを使った、あっさりスープの醤油ラーメンが人気らしい。\n平日の13時過ぎ、１人でカウンター席を利用しました。',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-              )
-              ),
-              SliderWidget(),
-              Row(
-                children: [
-                  Text('味'),
-                  Icon(Icons.star_outlined),
-                  Icon(Icons.star_outlined),
-                  Icon(Icons.star_outlined),
-                  Icon(Icons.star_outlined),
-                  Icon(Icons.star_outlined),
-                ]
-                ),
-                SizedBox(height: 30,),
-                Row(children:[
-                  Text(
-              '#YoursToMake',
-              //フォントを変更、サイズも変更する
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 16
-              ),
+                )),
+            SliderWidget(),
+            Row(children: [
+              Text('味'),
+              Icon(Icons.star_outlined),
+              Icon(Icons.star_outlined),
+              Icon(Icons.star_outlined),
+              Icon(Icons.star_outlined),
+              Icon(Icons.star_outlined),
+            ]),
+            SizedBox(
+              height: 30,
             ),
-                ])
+            Row(children: [
+              Text(
+                '#YoursToMake',
+                //フォントを変更、サイズも変更する
+                style: TextStyle(color: Colors.blue, fontSize: 16),
+              ),
+            ])
           ],
         ),
       ),
@@ -112,19 +130,39 @@ class SecondScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('写真'),
-        automaticallyImplyLeading: false,//左上の戻るボタンを消す
+        automaticallyImplyLeading: false, //左上の戻るボタンを消す
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
-            Text('Mr. Donut',
-               style: TextStyle(
+            IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                size: 30,
+                color: Colors.blue,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Sarch()),
+                );
+              },
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 30,
+                ),
+                Text(
+                  'Mr. Donut',
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 40,
                   ),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             Row(
@@ -152,26 +190,24 @@ class SecondScreen extends StatelessWidget {
               ],
             ),
             GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              primary: false,
-              crossAxisCount: 3,
-              children: [
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-                Image.asset('images/a.jpg'),
-
-              ]
-            ),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                primary: false,
+                crossAxisCount: 3,
+                children: [
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                  Image.asset('images/a.jpg'),
+                ]),
           ],
         ),
       ),
@@ -214,7 +250,7 @@ class CustomButton extends StatelessWidget {
             bottomLeft: Radius.circular(bottomLeftRadius ?? 0),
             bottomRight: Radius.circular(bottomRightRadius ?? 0),
           ),
-          border: Border.all(color: Colors.black, width:2),
+          border: Border.all(color: Colors.black, width: 2),
         ),
         child: Center(
           child: Text(
@@ -243,7 +279,6 @@ class _SliderWidgetState extends State<SliderWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            
             Text(
               'Min', // 最小値のラベル
               style: TextStyle(fontSize: 18),
