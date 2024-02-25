@@ -4,8 +4,6 @@ import 'map.dart';
 import 'sarch.dart';
 import 'mypage.dart';
 
-
-
 main() {
   //アプリ
   const app = MaterialApp(home: Root());

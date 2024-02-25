@@ -1,4 +1,7 @@
+import 'package:flutter_gyuukaku/main.dart';
+import 'package:flutter_gyuukaku/mypage.dart';
 import 'package:flutter_gyuukaku/review.dart';
+import 'package:flutter_gyuukaku/store_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +35,23 @@ class Sarch extends StatelessWidget {
               padding: EdgeInsets.only(top: 50, left: 16),
               child: Row(
                 children: [
-                  Text(
-                    'Mr.Dount',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      //押したときの動作
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => store()),
+                      );
+                    },
+                    child: Text(
+                      'Mr.Dount',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -88,57 +103,72 @@ class Sarch extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(left: 7),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.circle,
-                    color: Colors.grey,
-                    size: 45,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      children: [
-                        Text(
-                          '_gyukaku_nago',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'nago okinawa',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        )
-                      ],
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  //押したときの動作
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Mypage()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.circle,
+                      color: Colors.grey,
+                      size: 45,
                     ),
-                  ),
-                  Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 234, 234, 234),
-                      elevation: 10,
-                    ),
-                    onPressed: () {
-                      //押したときの動作
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Feedpage()),
-                      );
-                    },
-                    child: Text(
-                      'レビューを見る',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        children: [
+                          Text(
+                            '_gyukaku_nago',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            'nago okinawa',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Spacer(),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 234, 234, 234),
+                        elevation: 10,
+                      ),
+                      onPressed: () {
+                        //押したときの動作
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Feedpage()),
+                        );
+                      },
+                      child: Text(
+                        'レビューを見る',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Padding(

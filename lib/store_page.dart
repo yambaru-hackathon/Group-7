@@ -1,236 +1,262 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-  final img = [
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",    
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",
-  ];
+final img = [
+  "images/desk.png",
+  "images/bird.png",
+  "images/mofuo.png",
+  "images/desk.png",
+  "images/bird.png",
+  "images/mofuo.png",
+];
 
-class Sarch extends StatelessWidget {
-  const Sarch({super.key});
+class store extends StatelessWidget {
+  const store({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Container(
+            height: 150,
+            color: Colors.white,
+            child: ClipRect(
+              child: Image.asset(
+                'images/Kapsel.png',
                 height: 150,
-                color: Colors.white,
-                child: ClipRect(
-                  child: Image.asset(
-                    'images/Kapsel.png',
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover, // 画像をはみ出した部分をカットして表示
-                  ),
+                width: double.infinity,
+                fit: BoxFit.cover, // 画像をはみ出した部分をカットして表示
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 1,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 15,
+              ),
+              Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFF03FB93),
                 ),
               ),
-              SizedBox(height: 1,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                  SizedBox(width: 15,),
-                  Container(
-                  width: 10,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFF03FB93),
-                  ),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                '営業中',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
-                SizedBox(width: 3,),
-                Text(
-                  '営業中',
-                    style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                    ),
-                )
-              ],
+              )
+            ],
+          ),
+          Center(
+            child: Text(
+              'Mr Donut',
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.w800,
+                color: Colors.black,
+              ),
             ),
-                Center(
-                  child: Text(
-                    'Mr Donut',
-                      style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black,
-                      ),
-                  ),
-                ),
-                SizedBox(height: 3,),
-                Center(
-                  child: Text(
-                      '昔ながらの製法で作り続ける沖縄そばのお店',
-                        style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                        ),
-                    ),
-                ),
-                SizedBox(height: 30,),
-            Row(
-              children: [
-                Spacer(flex: 1,),
-                Text(
-                  '☆4.7',
-                    style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    ),
-                ),
-                Spacer(flex: 2,),
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          '味',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            ),
-                        ),
-                        Text(
-                          '★★★★',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF4992FF),
-                            ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 14,),
-                    Row(
-                      children: [
-                        Text(
-                          '衛星',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            ),
-                        ),
-                        Text(
-                          '★★★★',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF4992FF),
-                            ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 14,),
-                    Row(
-                      children: [
-                        Text(
-                          '雰囲気',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                            ),
-                        ),
-                        Text(
-                          '★★★★',
-                            style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF4992FF),
-                            ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Spacer(flex: 2,),
-                  Column(
-                    children: [
-                        Container(
-                        width: 90,
-                        height: 33,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          borderRadius: BorderRadius.circular(36),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '213',
-                            style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF4992FF),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Text(
-                      'いいね！',
-                      style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 17,),
-                      Container(
-                        width: 90,
-                        height: 33,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          borderRadius: BorderRadius.circular(36),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '9',
-                            style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF4992FF),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Text(
-                      '件の投稿',
-                      style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(flex: 1,),
-              ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Center(
+            child: Text(
+              '昔ながらの製法で作り続ける沖縄そばのお店',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
             ),
-          SizedBox(height: 40,),
+          ),
+          SizedBox(
+            height: 30,
+          ),
           Row(
             children: [
-              Spacer(flex: 2,),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(85,35),
-                    backgroundColor: const Color(0xFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(99),
+              Spacer(
+                flex: 1,
+              ),
+              Text(
+                '☆4.7',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+              Spacer(
+                flex: 2,
+              ),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '味',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        '★★★★',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4992FF),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '衛星',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        '★★★★',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4992FF),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '雰囲気',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        '★★★★',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4992FF),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Spacer(
+                flex: 2,
+              ),
+              Column(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 33,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD9D9D9),
+                      borderRadius: BorderRadius.circular(36),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '213',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF4992FF),
+                        ),
+                      ),
                     ),
                   ),
-                onPressed: () { /* ボタンがタップされた時の処理 */ },
+                  Text(
+                    'いいね！',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 17,
+                  ),
+                  Container(
+                    width: 90,
+                    height: 33,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFD9D9D9),
+                      borderRadius: BorderRadius.circular(36),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '9',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF4992FF),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '件の投稿',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(
+                flex: 1,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          Row(
+            children: [
+              Spacer(
+                flex: 2,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(85, 35),
+                  backgroundColor: const Color(0xFFD9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                ),
+                onPressed: () {/* ボタンがタップされた時の処理 */},
                 child: Row(
                   children: [
                     Icon(
@@ -239,202 +265,205 @@ class Sarch extends StatelessWidget {
                     ),
                     Text(
                       'GO',
-                        style: TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF4992FF),
-                        ),
                       ),
+                    ),
                   ],
                 ),
-                ),
-              Spacer(flex: 3,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(105,35),
-                    backgroundColor: const Color(0xFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(99),
-                    ),
+              ),
+              Spacer(
+                flex: 3,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(105, 35),
+                  backgroundColor: const Color(0xFFD9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(99),
                   ),
+                ),
                 onPressed: () {
-                    showModalBottomSheet(
+                  showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
                       return Container(
-                        height: 450,
-                        width: double.infinity,
-                        child: Column(
-                          children: [
-                            Spacer(),
-                            Text(
-                            '住所',
-                              style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              ),
-                            ),
-                            Container(
-                              width: 340,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD9D9D9),
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '沖縄県名護市辺野古906 沖縄工業高等専門学校',
-                                  style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF4992FF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Row(
-                              children: [
-                            Spacer(),
-                            Column(
-                              children: [
-                                Text(
-                                '移動時間',
-                                  style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  ),
-                                ),
-                            Container(
-                              width: 150,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD9D9D9),
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '400m  徒歩20分',
-                                  style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF4992FF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            ]),
-                            Spacer(),
-                            Column(
-                              children: [
-                                Text(
-                                '退店までの時間',
-                                  style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  ),
-                                ),
-                            Container(
-                              width: 150,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD9D9D9),
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '45分',
-                                  style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF4992FF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            ],
-                            ),
-                            Spacer()
-                              ],
-                            ),
-                            Spacer(),
-                            Text(
-                            '開店時間',
-                              style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              ),
-                            ),
-                            Container(
-                              width: 340,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD9D9D9),
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '開店中   12:00 〜 20:00',
-                                  style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF4992FF),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          height: 450,
+                          width: double.infinity,
+                          child: Column(
+                            children: [
                               Spacer(),
-                              Center(
-                                child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: const Size(85,35),
-                                  backgroundColor: const Color(0xFFD9D9D9),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(99),
-                                  ),
+                              Text(
+                                '住所',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  '戻る',
+                              ),
+                              Container(
+                                width: 340,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFD9D9D9),
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '沖縄県名護市辺野古906 沖縄工業高等専門学校',
                                     style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: const Color(0xFF4992FF),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF4992FF),
                                     ),
                                   ),
                                 ),
                               ),
                               Spacer(),
-                          ],
-                        )
-                      );
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  Column(children: [
+                                    Text(
+                                      '移動時間',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 150,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFD9D9D9),
+                                        borderRadius: BorderRadius.circular(0),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '400m  徒歩20分',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF4992FF),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Spacer(),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '退店までの時間',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 150,
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFD9D9D9),
+                                          borderRadius:
+                                              BorderRadius.circular(0),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            '45分',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              color: const Color(0xFF4992FF),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer()
+                                ],
+                              ),
+                              Spacer(),
+                              Text(
+                                '開店時間',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Container(
+                                width: 340,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFD9D9D9),
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '開店中   12:00 〜 20:00',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF4992FF),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                              Center(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    fixedSize: const Size(85, 35),
+                                    backgroundColor: const Color(0xFFD9D9D9),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(99),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    '戻る',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: const Color(0xFF4992FF),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                            ],
+                          ));
                     },
                   );
                 },
                 child: Text(
                   '詳細情報',
-                    style: TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFF4992FF),
-                    ),
                   ),
                 ),
-              Spacer(flex: 3,),
+              ),
+              Spacer(
+                flex: 3,
+              ),
               ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(85,35),
-                    backgroundColor: const Color(0xFFD9D9D9),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(99),
-                    ),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(85, 35),
+                  backgroundColor: const Color(0xFFD9D9D9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(99),
                   ),
+                ),
                 onPressed: () {
                   openPhoneCall();
                 },
@@ -447,20 +476,24 @@ class Sarch extends StatelessWidget {
                     ),
                     Text(
                       '電話',
-                        style: TextStyle(
+                      style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF4992FF),
-                        ),
                       ),
+                    ),
                   ],
                 ),
-                ),
-                Spacer(flex: 2,),
+              ),
+              Spacer(
+                flex: 2,
+              ),
             ],
           ),
 
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
 
           // 画像まとめているところ
           Container(
@@ -469,26 +502,24 @@ class Sarch extends StatelessWidget {
             color: const Color(0xFFD9D9D9),
           ),
           MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              children: img.map((img) {
-                return InstagramPostItem(img: img);
-              }).toList(),
-            )
-          )
-          ]),
+              context: context,
+              removeTop: true,
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 3,
+                children: img.map((img) {
+                  return InstagramPostItem(img: img);
+                }).toList(),
+              ))
+        ]),
       ),
     );
   }
 }
 
-
 class InstagramPostItem extends StatelessWidget {
-  const InstagramPostItem({Key? key,required this.img}) : super(key: key);
+  const InstagramPostItem({Key? key, required this.img}) : super(key: key);
 
   final String img;
 
@@ -515,25 +546,24 @@ _launchURL(String url) async {
 }
 
 void openPhoneCall() async {
-    final Uri callLaunchUri = Uri(
-      scheme: 'tel',
-      path: '117',
-    );
+  final Uri callLaunchUri = Uri(
+    scheme: 'tel',
+    path: '117',
+  );
 
-    canLaunchUrl(callLaunchUri).then((value) {
-      if (value) {
-            launchUrl(callLaunchUri).then((value) {
-              print('launchUrl result: $value');
-            });
-      } else {
-            print('cannot call');
-      }
-    });
+  canLaunchUrl(callLaunchUri).then((value) {
+    if (value) {
+      launchUrl(callLaunchUri).then((value) {
+        print('launchUrl result: $value');
+      });
+    } else {
+      print('cannot call');
+    }
+  });
 }
-
 
 void main() {
   runApp(MaterialApp(
-    home: Sarch(),
+    home: store(),
   ));
 }
