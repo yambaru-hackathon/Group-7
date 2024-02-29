@@ -2,33 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gyuukaku/service.dart';
 
-final imgProvider = Provider((_) => [
-  "images/desk.png",
-  "images/bird.png",
-  "images/mofuo.png",
-  "images/desk.png",
-  "images/bird.png",
-  "images/mofuo.png",
-]);
 
-var usersID = 'yzOTsb7lS5DwrvvYRPl1';
+final imgProvider = FutureProvider<List<String>>((ref) async {
+  final service = ref.read(serviceProvider);
+  return service.readUserPostImages(usersID); // readUserPostImages 関数を呼び出す
+});
+
+var usersID = 'BVMyTOqbcwbhzmv2jQkB';
 
 final nameProvider = FutureProvider<String>((ref) async {
   final service = ref.read(serviceProvider);
-  final userData = await service.read(usersID);
+  final userData = await service.read_user(usersID);
   return userData != null ? userData[0] : '';
 });
 
 final likedProvider = FutureProvider<int>((ref) async {
   final service = ref.read(serviceProvider);
-  final userData = await service.read(usersID);
+  final userData = await service.read_user(usersID);
   return userData != null ? int.tryParse(userData[1]) ?? 0 : 0;
 });
 
 final postsProvider = FutureProvider<int>((ref) async {
   final service = ref.read(serviceProvider);
-  final userData = await service.read(usersID);
+  final userData = await service.read_user(usersID);
   return userData != null ? int.tryParse(userData[2]) ?? 0 : 0;
+});
+
+final profileURLProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final userData = await service.read_user(usersID);
+  return userData != null ? userData[3] : '';
 });
 
 final overlayVisibleProvider = StateNotifierProvider<OverlayVisibleNotifier, bool>((ref) => OverlayVisibleNotifier());
@@ -52,7 +55,21 @@ class Mypage extends ConsumerWidget {
     final nameAsyncValue = ref.watch(nameProvider);
     final likedAsyncValue = ref.watch(likedProvider);
     final postsAsyncValue = ref.watch(postsProvider);
+    final profileURLValue = ref.watch(profileURLProvider);
     final imgList = ref.watch(imgProvider);
+
+    final profileURL =             
+    profileURLValue.when(
+    data: (data) => data,
+    loading: () => '', // データがロード中の場合のデフォルト値
+    error: (_, __) => '', // エラーが発生した場合のデフォルト値
+    );
+
+    final isLoading = profileURLValue.maybeWhen(
+    loading: () => true, // ローディング中の場合 true を返す
+    orElse: () => false, // それ以外の場合は false を返す
+    );
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -62,7 +79,17 @@ class Mypage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset('images/Kapsel.png'),
+                Visibility(
+                  visible: isLoading, // ローディング中の場合には true を返し、ローディングインジケーターを表示
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                Visibility(
+                  visible: !isLoading, // ローディング中ではない場合には true を返し、画像を表示
+                  child: Image.network(
+                    profileURL,
+                    fit: BoxFit.cover, //ここ注意
+                  ),
+                ),
                 SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -153,11 +180,11 @@ class Mypage extends ConsumerWidget {
                           ),
                           child: Center(
                             child: Text(
-                              postsAsyncValue.when(
-                                data: (data) => data.toString(),
-                                loading: () => 'now loading', // データがロード中の場合のデフォルト値
-                                error: (_, __) => 'error', // エラーが発生した場合のデフォルト値
-                              ),
+                                imgList.when(
+                                  data: (imgList) => imgList.length.toString(), // データが利用可能になったらリストの要素数を取得する
+                                  loading: () => '', // ローディング中は要素数を 0 とする
+                                  error: (_, __) => '', // エラーが発生した場合も要素数を 0 とする
+                                ),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -212,7 +239,10 @@ class Mypage extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () { /* ボタンがタップされた時の処理 */ },
+                      onPressed: () {
+
+
+                      },
                       child: Center(
                         child: Icon(
                           Icons.share,
@@ -232,14 +262,28 @@ class Mypage extends ConsumerWidget {
                 MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 3,
-                    children: imgList.map((img) {
-                      return InstagramPostItem(img: img);
-                    }).toList(),
-                  )
+                  child: Consumer(builder: (context, watch, child) {
+                    final imgListAsyncValue = ref.watch(imgProvider); // imgProvider の値を取得
+
+                    return imgListAsyncValue.when(
+                      data: (imgList) {
+                        return GridView.count(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisCount: 3,
+                          children: imgList.map((img) {
+                            return InstagramPostItem(img: img);
+                          }).toList(),
+                        );
+                      },
+                      loading: () {
+                        return Center(child: CircularProgressIndicator());
+                      },
+                      error: (error, stackTrace) {
+                        return Text('Error: $error');
+                      },
+                    );
+                  }),
                 )
               ],
             ),
@@ -285,18 +329,32 @@ class Mypage extends ConsumerWidget {
                           ),
                         ),
                         SizedBox(height: 20,),
-                        MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          child: GridView.count(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            crossAxisCount: 3,
-                            children: imgList.map((img) {
-                              return InstagramPostItem(img: img);
-                            }).toList(),
-                          )
-                        )
+                      MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: Consumer(builder: (context, watch, child) {
+                          final imgListAsyncValue = ref.watch(imgProvider); // imgProvider の値を取得
+
+                          return imgListAsyncValue.when(
+                            data: (imgList) {
+                              return GridView.count(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                crossAxisCount: 3,
+                                children: imgList.map((img) {
+                                  return InstagramPostItem(img: img);
+                                }).toList(),
+                              );
+                            },
+                            loading: () {
+                              return Center(child: CircularProgressIndicator());
+                            },
+                            error: (error, stackTrace) {
+                              return Text('Error: $error');
+                            },
+                          );
+                        }),
+                      )
                       ],
                     ),
                   ),
@@ -320,7 +378,7 @@ class InstagramPostItem extends StatelessWidget {
       onTap: () {
         // 画像がタップされた時の処理
       },
-      child: Image.asset(
+      child: Image.network(
         img,
         fit: BoxFit.cover,
       ),
