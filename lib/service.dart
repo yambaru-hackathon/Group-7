@@ -11,7 +11,6 @@ class FirestoreService {
       final userData = doc.data();
       final name = userData?['name']?.toString();
       final liked = userData?['liked']?.toString();
-      final posts = userData?['posts']?.toString();
       final profileURL = userData?['profileURL']?.toString();
 
 
@@ -22,9 +21,6 @@ class FirestoreService {
       }
       if (liked != null) {
         userDataList.add(liked);
-      }
-      if (posts != null) {
-        userDataList.add(posts);
       }
       if (profileURL != null) {
         userDataList.add(profileURL);

@@ -22,16 +22,10 @@ final likedProvider = FutureProvider<int>((ref) async {
   return userData != null ? int.tryParse(userData[1]) ?? 0 : 0;
 });
 
-final postsProvider = FutureProvider<int>((ref) async {
-  final service = ref.read(serviceProvider);
-  final userData = await service.read_user(usersID);
-  return userData != null ? int.tryParse(userData[2]) ?? 0 : 0;
-});
-
 final profileURLProvider = FutureProvider<String>((ref) async {
   final service = ref.read(serviceProvider);
   final userData = await service.read_user(usersID);
-  return userData != null ? userData[3] : '';
+  return userData != null ? userData[2] : '';
 });
 
 final overlayVisibleProvider = StateNotifierProvider<OverlayVisibleNotifier, bool>((ref) => OverlayVisibleNotifier());
@@ -54,7 +48,6 @@ class Mypage extends ConsumerWidget {
     final overlayVisible = ref.watch(overlayVisibleProvider);
     final nameAsyncValue = ref.watch(nameProvider);
     final likedAsyncValue = ref.watch(likedProvider);
-    final postsAsyncValue = ref.watch(postsProvider);
     final profileURLValue = ref.watch(profileURLProvider);
     final imgList = ref.watch(imgProvider);
 
