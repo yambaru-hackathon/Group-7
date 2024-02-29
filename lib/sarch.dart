@@ -2,10 +2,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 
 //
 // 画面 A
 //
+
 class Sarch extends StatelessWidget {
   const Sarch({super.key});
 
@@ -77,13 +79,159 @@ class Sarch extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              width: 420,
-              height: 310,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Image.asset('images/IMG_7263.jpg'),
+            //Image.asset('images/IMG_7263.jpg'),
+            Stack(
+              children: [
+                Image.asset(
+                  'images/IMG_7263.jpg',
+                ),
+                Positioned(
+                  bottom: 5, // 画像の下端から20ピクセル上に配置
+                  right: 10, // 画像の右端から20ピクセル左に配置
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // ボタンが押されたときの処理
+                    },
+                    child: Text(
+                      'GO',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(left: 7),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.circle,
+                    color: Colors.grey,
+                    size: 45,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        Text(
+                          '_gyukaku_nago',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'nago okinawa',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 234, 234, 234),
+                      elevation: 10,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      'レビューを見る',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ],
               ),
+            ),
+            /*Padding(
+              padding: EdgeInsets.only(top: 50, left: 16),
+              child: Row(
+                children: [
+                  Text(
+                    'Mr.Dount',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                  Spacer(),
+                  Text(
+                    '¥1200',
+                    style:
+                        TextStyle(fontSize: 19, fontWeight: FontWeight.normal),
+                  ),
+                  Icon(
+                    Icons.bookmark_border,
+                    size: 30,
+                  ),
+                ],
+              ),
+            ),
+            //Image.asset('images/IMG_1884.jpg'),
+            Stack(
+              children: [
+                Image.asset(
+                  'images/IMG_1884.jpg',
+                ),
+                Positioned(
+                  bottom: 5, // 画像の下端から20ピクセル上に配置
+                  right: 10, // 画像の右端から20ピクセル左に配置
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // ボタンが押されたときの処理
+                    },
+                    child: Text(
+                      'GO',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.only(left: 7),
@@ -184,13 +332,32 @@ class Sarch extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              width: 420,
-              height: 310,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Image.asset('images/IMG_7265.jpg'),
-              ),
+            //Image.asset('images/IMG_7264.jpg'),
+            Stack(
+              children: [
+                Image.asset(
+                  'images/IMG_7264.jpg',
+                ),
+                Positioned(
+                  bottom: 5, // 画像の下端から20ピクセル上に配置
+                  right: 10, // 画像の右端から20ピクセル左に配置
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      // ボタンが押されたときの処理
+                    },
+                    child: Text(
+                      'GO',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.only(left: 7),
@@ -240,120 +407,211 @@ class Sarch extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 50, left: 16),
-              child: Row(
-                children: [
-                  Text(
-                    'Mr.Dount',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                  Spacer(),
-                  Text(
-                    '¥1200',
-                    style:
-                        TextStyle(fontSize: 19, fontWeight: FontWeight.normal),
-                  ),
-                  Icon(
-                    Icons.bookmark_border,
-                    size: 30,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 420,
-              height: 310,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Image.asset('images/IMG_7264.jpg'),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 7),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.circle,
-                    color: Colors.grey,
-                    size: 45,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      children: [
-                        Text(
-                          '_gyukaku_nago',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'nago okinawa',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Spacer(),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 234, 234, 234),
-                      elevation: 10,
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'レビューを見る',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            ),*/
           ],
         ),
       ),
     );
   }
 }
+
+/*
+class Sarch extends StatelessWidget {
+  const Sarch({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // ボタンが押された時の処理
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => newpage()),
+          );
+        },
+        backgroundColor: Color.fromARGB(170, 125, 196, 255),
+        child: Icon(Icons.add),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < yourFirestoreData.length; i++)
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 50, left: 16),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Mr.Dount',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        // Stars and other widgets...
+                      ],
+                    ),
+                  ),
+                  Stack(
+                    children: [
+                      Image.asset(
+                        'images/IMG_7263.jpg',
+                      ),
+                      Positioned(
+                        bottom: 5, // 画像の下端から20ピクセル上に配置
+                        right: 10, // 画像の右端から20ピクセル左に配置
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                          ),
+                          onPressed: () {
+                            // ボタンが押されたときの処理
+                          },
+                          child: Text(
+                            'GO',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7),
+                    child: Row(
+                      children: [
+                        // Profile icon and information
+                        Spacer(),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 234, 234, 234),
+                            elevation: 10,
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            'レビューを見る',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+*/
+
+/*
+class Sarch extends StatelessWidget {
+  const Sarch({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('your_collection').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator(); // データが読み込まれるまでローディング表示
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              var document = snapshot.data!.docs[index];
+              // Firestoreから取得したデータを使ってWidgetを構築する
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 50, left: 16),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Mr.Dount',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        // Stars and other widgets...
+                      ],
+                    ),
+                  ),
+                  Stack(
+                    children: [
+                      Image.asset(
+                        'images/IMG_7263.jpg',
+                      ),
+                      Positioned(
+                        bottom: 5, // 画像の下端から20ピクセル上に配置
+                        right: 10, // 画像の右端から20ピクセル左に配置
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                          ),
+                          onPressed: () {
+                            // ボタンが押されたときの処理
+                          },
+                          child: Text(
+                            'GO',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7),
+                    child: Row(
+                      children: [
+                        // Profile icon and information
+                        Spacer(),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 234, 234, 234),
+                            elevation: 10,
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            'レビューを見る',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+*/
 
 class newpage extends StatelessWidget {
   const newpage({super.key});
