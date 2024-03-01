@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class FirestoreService {
   final db = FirebaseFirestore.instance;
 
+
+// ユーザーDB読み込み
   Future<List<String>> read_user(userID) async {
     final doc = await db.collection('users').doc(userID).get();
     if (doc.exists) {
@@ -33,6 +35,7 @@ class FirestoreService {
     }
   }
 
+// ユーザーDBのmypostを参考にpostDBから画像のURLを配列で取ってくる
 Future<List<String>> readUserPostImages(String userID) async {
   final doc = await db.collection('users').doc(userID).get();
   if (doc.exists) {
@@ -62,53 +65,147 @@ Future<List<String>> readUserPostImages(String userID) async {
   }
 }
 
+// postDBからデータを取ってくる
+  Future<List<String>> read_post(postID) async {
+  final doc = await db.collection('users').doc(postID).get();
+  if (doc.exists) {
+    final postData = doc.data();
+    final userid = postData?['userid']?.toString();
+    final storeid = postData?['storeid']?.toString();
+    final discount = postData?['discount']?.toString();
+    final review = postData?['review']?.toString();
+    final taste = postData?['taste']?.toString();
+    final atmosphere = postData?['atmosphere']?.toString();
+    final hygiene = postData?['hygiene']?.toString();
+    final image = postData?['image']?.toString();
 
-    Future<List<String>> read_post(postID) async {
-    final doc = await db.collection('users').doc(postID).get();
-    if (doc.exists) {
-      final postData = doc.data();
-      final userid = postData?['userid']?.toString();
-      final storeid = postData?['storeid']?.toString();
-      final discount = postData?['discount']?.toString();
-      final review = postData?['review']?.toString();
-      final taste = postData?['taste']?.toString();
-      final atmosphere = postData?['atmosphere']?.toString();
-      final hygiene = postData?['hygiene']?.toString();
-      final image = postData?['image']?.toString();
+    List<String> postDataList = [];
 
-      List<String> postDataList = [];
-
-      if (userid != null) {
-        postDataList.add(userid);
-      }
-      if (storeid != null) {
-        postDataList.add(storeid);
-      }
-      if (discount != null) {
-        postDataList.add(discount);
-      }
-      if (review != null) {
-        postDataList.add(review);
-      }
-      if (taste != null) {
-        postDataList.add(taste);
-      }
-      if (atmosphere != null) {
-        postDataList.add(atmosphere);
-      }
-      if (hygiene != null) {
-        postDataList.add(hygiene);
-      }
-      if (image != null) {
-        postDataList.add(image);
-      }
-
-      return postDataList;
-    } else {
-      debugPrint('userID: $postID のドキュメントが見つかりませんでした');
-      return [];
+    if (userid != null) {
+      postDataList.add(userid);
     }
+    if (storeid != null) {
+      postDataList.add(storeid);
+    }
+    if (discount != null) {
+      postDataList.add(discount);
+    }
+    if (review != null) {
+      postDataList.add(review);
+    }
+    if (taste != null) {
+      postDataList.add(taste);
+    }
+    if (atmosphere != null) {
+      postDataList.add(atmosphere);
+    }
+    if (hygiene != null) {
+      postDataList.add(hygiene);
+    }
+    if (image != null) {
+      postDataList.add(image);
+    }
+
+    return postDataList;
+  } else {
+    debugPrint('userID: $postID のドキュメントが見つかりませんでした');
+    return [];
   }
+}
+
+
+// storeDBからデータを取ってくる
+  Future<List<String>> read_store(storeID) async {
+  final doc = await db.collection('stores').doc(storeID).get();
+  if (doc.exists) {
+    final postData = doc.data();
+    final address = postData?['address']?.toString();
+    final atmosphere = postData?['atmosphere']?.toString();
+    final averageTime = postData?['averageTime']?.toString();
+    final detail = postData?['detail']?.toString();
+    final hygiene = postData?['hygiene']?.toString();
+    final liked = postData?['liked']?.toString();
+    final name = postData?['name']?.toString();
+    final open = postData?['open']?.toString();
+    final taste = postData?['taste']?.toString();
+    final total = postData?['total']?.toString();
+    final storeURL = postData?['storeURL']?.toString();
+
+    List<String> storeDataList = [];
+
+    if (storeURL != null) {
+      storeDataList.add(storeURL);
+    }
+    if (name != null) {
+      storeDataList.add(name);
+    }
+    if (detail != null) {
+      storeDataList.add(detail);
+    }
+    if (total != null) {
+      storeDataList.add(total);
+    }
+    if (taste != null) {
+      storeDataList.add(taste);
+    }
+    if (hygiene != null) {
+      storeDataList.add(hygiene);
+    }
+    if (atmosphere != null) {
+      storeDataList.add(atmosphere);
+    }
+    if (liked != null) {
+      storeDataList.add(liked);
+    }
+    if (address != null) {
+      storeDataList.add(address);
+    }
+    if (averageTime != null) {
+      storeDataList.add(averageTime);
+    }
+    if (open != null) {
+      storeDataList.add(open);
+    }
+
+    return storeDataList;
+  } else {
+    debugPrint('userID: $storeID のドキュメントが見つかりませんでした');
+    return [];
+  }
+}
+
+// storeDBのpostdを参考にpostDBから画像のURLを配列で取ってくる
+Future<List<String>> storePostdImages(String storeID) async {
+  final doc = await db.collection('stores').doc(storeID).get();
+  if (doc.exists) {
+    final storeData = doc.data();
+    final mypost = List<String>.from(storeData?['postd'] ?? []);
+
+    // 画像の URL を格納するリスト
+    List<String> imageUrls = [];
+
+    // mypost 配列の各 post ID に対応する画像の URL を取得
+    for (String postId in mypost) {
+      // Firestore から post ドキュメントを取得
+      final postDoc = await db.collection('posts').doc(postId).get();
+      if (postDoc.exists) {
+        // post ドキュメントから画像の URL を取得してリストに追加
+        final postData = postDoc.data();
+        final imageUrl = postData?['image'];
+        if (imageUrl != null) {
+          imageUrls.add(imageUrl.toString());
+        }
+      }
+    }
+    return imageUrls;
+  } else {
+    debugPrint('userID: $storeID のドキュメントが見つかりませんでした');
+    return [];
+  }
+}
+
+
+
 
   Future<List<String>> getAllImageURLs() async {
     try {

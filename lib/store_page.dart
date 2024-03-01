@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gyuukaku/service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
   final img = [
     "images/desk.png",
@@ -11,29 +15,130 @@ import 'package:flutter_gyuukaku/service.dart';
     "images/mofuo.png",
   ];
 
-class Sarch extends StatelessWidget {
-  const Sarch({super.key});
+  final imgProvider = FutureProvider<List<String>>((ref) async {
+  final service = ref.read(serviceProvider);
+  return service.storePostdImages(storeID); // storePostdImages 関数を呼び出す
+});
+
+var usersID = 'BVMyTOqbcwbhzmv2jQkB';
+var storeID = 'qWA8WncdPsdir1zRyHlP';
+
+final serviceProvider = Provider<FirestoreService>((_) => FirestoreService());
+
+final imageProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? storeData[0] : 'DBからのデータが取れませんでした。';
+});
+
+final nameProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? storeData[1] : 'DBからのデータが取れませんでした。';
+});
+
+final detailProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? storeData[2] : '';
+});
+
+final totalProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[3]) ?? 0 : 0;
+});
+
+final tasteProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[4]) ?? 0 : 0;
+});
+
+final hygieneProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[5]) ?? 0 : 0;
+});
+
+final atmosphereProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[6]) ?? 0 : 0;
+});
+
+final likedProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[7]) ?? 0 : 0;
+});
+
+final addressProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? storeData[8] : '';
+});
+
+final averageTimeProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? int.tryParse(storeData[9]) ?? 0 : 0;
+});
+
+final openProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final storeData = await service.read_store(storeID);
+  return storeData != null ? storeData[10] : '';
+});
+
+
+
+
+
+
+
+class Sarch extends ConsumerWidget {
+  Sarch({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final imageURL =             
+    ref.watch(imageProvider).when(
+    data: (data) => data,
+    loading: () => '', // データがロード中の場合のデフォルト値
+    error: (_, __) => '', // エラーが発生した場合のデフォルト値
+    );
+
+    final isLoading = ref.watch(imageProvider).maybeWhen(
+    loading: () => true, // ローディング中の場合 true を返す
+    orElse: () => false, // それ以外の場合は false を返す
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+        Container(
+          height: 150,
+          color: Colors.white,
+          child: ClipRect(
+            child: Visibility(
+              visible: !isLoading && imageURL.isNotEmpty, // 画像が読み込まれていて表示する場合のみ表示
+              child: Image.network(
+                imageURL,
                 height: 150,
-                color: Colors.white,
-                child: ClipRect(
-                  child: Image.asset(
-                    'images/Kapsel.png',
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover, // 画像をはみ出した部分をカットして表示
-                  ),
-                ),
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
+              replacement: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ),
               SizedBox(height: 1,),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -60,18 +165,26 @@ class Sarch extends StatelessWidget {
             ),
                 Center(
                   child: Text(
-                    'Mr Donut',
-                      style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black,
-                      ),
+                  ref.watch(nameProvider).when(
+                  data: (data) => data,
+                  loading: () => 'ロードエラー', // データがロード中の場合のデフォルト値
+                  error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                ),
+                  style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.black,
+                  ),
                   ),
                 ),
                 SizedBox(height: 3,),
                 Center(
                   child: Text(
-                      '昔ながらの製法で作り続ける沖縄そばのお店',
+                  ref.watch(detailProvider).when(
+                  data: (data) => data,
+                  loading: () => 'ロードエラー', // データがロード中の場合のデフォルト値
+                  error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                ),
                         style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -84,7 +197,11 @@ class Sarch extends StatelessWidget {
               children: [
                 Spacer(flex: 1,),
                 Text(
-                  '☆4.7',
+                  ref.watch(totalProvider).when(
+                  data: (data) => '★ $data',
+                  loading: () => 'ロードエラー', // データがロード中の場合のデフォルト値
+                  error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                ),
                     style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w500,
@@ -94,6 +211,36 @@ class Sarch extends StatelessWidget {
                 Spacer(flex: 2,),
                 Column(
                   children: [
+
+
+// RatingBar.builder(
+//   itemBuilder: (context, index) {
+//     final totalAsyncValue = ref.watch(totalProvider);
+//     return totalAsyncValue.when(
+//       data: (total) {
+//         return Container(
+//           padding: EdgeInsets.all(0), // アイコンとアイコンの間の距離を調整
+//           child: Icon(
+//             index < total ? Icons.star : Icons.star_border,
+//             color: const Color(0xFF4992FF),
+//             size: 10, // アイコンのサイズを調整
+//           ),
+//         );
+//       },
+//       loading: () => CircularProgressIndicator(), // ロード中はローディングインジケータを表示
+//       error: (_, __) => Icon(Icons.star_border), // エラーが発生した場合はデフォルトのアイコンを表示
+//     );
+//   },
+//   onRatingUpdate: (rating) {
+//     // 評価が更新されたときの処理を書く
+//   },
+//   itemCount: 5,
+//   unratedColor: Colors.blue[100],
+// ),
+
+
+
+
                     Row(
                       children: [
                         Text(
@@ -170,7 +317,11 @@ class Sarch extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '213',
+                            ref.watch(likedProvider).when(
+                            data: (data) => data.toString(),
+                            loading: () => 'ロードエラー', // データがロード中の場合のデフォルト値
+                            error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                          ),
                             style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -285,7 +436,11 @@ class Sarch extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  '沖縄県名護市辺野古906 沖縄工業高等専門学校',
+                                    ref.watch(addressProvider).when(
+                                    data: (data) => data,
+                                    loading: () => '読み込み中', // データがロード中の場合のデフォルト値
+                                    error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                                  ),
                                   style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -301,36 +456,6 @@ class Sarch extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                '移動時間',
-                                  style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  ),
-                                ),
-                            Container(
-                              width: 150,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFD9D9D9),
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '400m  徒歩20分',
-                                  style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF4992FF),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            ]),
-                            Spacer(),
-                            Column(
-                              children: [
-                                Text(
                                 '退店までの時間',
                                   style: TextStyle(
                                   fontSize: 17,
@@ -339,7 +464,7 @@ class Sarch extends StatelessWidget {
                                   ),
                                 ),
                             Container(
-                              width: 150,
+                              width: 340,
                               height: 36,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFD9D9D9),
@@ -347,7 +472,11 @@ class Sarch extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  '45分',
+                                    ref.watch(averageTimeProvider).when(
+                                    data: (data) => '$data分',
+                                    loading: () => '読み込み中', // データがロード中の場合のデフォルト値
+                                    error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                                  ),
                                   style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -379,7 +508,11 @@ class Sarch extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  '開店中   12:00 〜 20:00',
+                                    ref.watch(openProvider).when(
+                                    data: (data) => data,
+                                    loading: () => '読み込み中', // データがロード中の場合のデフォルト値
+                                    error: (_, __) => 'エラーが出た', // エラーが発生した場合のデフォルト値
+                                  ),
                                   style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -469,18 +602,32 @@ class Sarch extends StatelessWidget {
             height: 6,
             color: const Color(0xFFD9D9D9),
           ),
-          MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 3,
-              children: img.map((img) {
-                return InstagramPostItem(img: img);
-              }).toList(),
-            )
-          )
+                      MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: Consumer(builder: (context, watch, child) {
+                          final imgListAsyncValue = ref.watch(imgProvider); // imgProvider の値を取得
+
+                          return imgListAsyncValue.when(
+                            data: (imgList) {
+                              return GridView.count(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                crossAxisCount: 3,
+                                children: imgList.map((img) {
+                                  return InstagramPostItem(img: img);
+                                }).toList(),
+                              );
+                            },
+                            loading: () {
+                              return Center(child: CircularProgressIndicator());
+                            },
+                            error: (error, stackTrace) {
+                              return Text('Error: $error');
+                            },
+                          );
+                        }),
+                      )
           ]),
       ),
     );
@@ -499,7 +646,7 @@ class InstagramPostItem extends StatelessWidget {
       onTap: () {
         // 画像が押された時の処理
       },
-      child: Image.asset(
+      child: Image.network(
         img,
         fit: BoxFit.cover,
       ),
@@ -533,8 +680,18 @@ void openPhoneCall() async {
 }
 
 
-void main() {
-  runApp(MaterialApp(
-    home: Sarch(),
-  ));
+void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+    MaterialApp(
+      home: ProviderScope(
+        child: Sarch(),
+      ),
+    ),
+  );
 }
