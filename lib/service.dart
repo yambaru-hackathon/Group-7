@@ -204,6 +204,30 @@ Future<List<String>> storePostdImages(String storeID) async {
   }
 }
 
+Future<String> getStoreName(String postID) async {
+  try {
+    // Firestoreのpostsコレクションから指定されたpostIDのドキュメントを取得
+    DocumentSnapshot postSnapshot =
+        await db.collection('posts').doc(postID).get();
+
+    // postSnapshotからstoreIDを取得
+    String storeID = postSnapshot.get('storeID');
+
+    // FirestoreのstoresコレクションからstoreIDに対応する店舗のドキュメントを取得
+    DocumentSnapshot storeSnapshot =
+        await db.collection('stores').doc(storeID).get();
+
+    // 店舗のドキュメントから店舗名を取得して返す
+    String storeName = storeSnapshot.get('storeName');
+
+    return storeName;
+  } catch (e) {
+    print('Error fetching store name: $e');
+    return ''; // エラー時はnullを返すか、エラーハンドリングを行う
+  }
+}
+
+
 
 
 
