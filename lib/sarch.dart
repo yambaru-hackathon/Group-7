@@ -257,7 +257,7 @@ class PostWidgets extends StatelessWidget {
           // ボタンが押された時の処理
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => newpage()),
+            MaterialPageRoute(builder: (context) => NewPage()),
           );
         },
         backgroundColor: Color.fromARGB(170, 125, 196, 255),

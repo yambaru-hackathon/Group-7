@@ -88,17 +88,15 @@ final averageTimeProvider = FutureProvider<int>((ref) async {
 final openProvider = FutureProvider<String>((ref) async {
   final service = ref.read(serviceProvider);
   final storeData = await service.read_store(storeID);
-  return storeData != null ? storeData[10] : '';
+  return storeData != null ? storeData[10] : 'ないよん';
 });
 
 class Sarch extends ConsumerWidget {
-  // final String storeID; // storeID 引数を追加
+  // String storeID; // storeID 引数を追加
 
   // Sarch({Key? key, required this.storeID}) : super(key: key);
 
-  //   String getStoreID() {
-  //   return storeID;
-  // }
+  // String get getStoreID => storeID;
 
   Sarch({Key? key,}) : super(key: key);
 
@@ -679,18 +677,18 @@ void openPhoneCall() async {
 }
 
 
-void main() async{
+// void main() async{
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
 
-  runApp(
-    MaterialApp(
-      home: ProviderScope(
-        child: Sarch(),
-      ),
-    ),
-  );
-}
+//   runApp(
+//     MaterialApp(
+//       home: ProviderScope(
+//         child: Sarch(),
+//       ),
+//     ),
+//   );
+// }

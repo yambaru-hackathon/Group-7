@@ -1,12 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_gyuukaku/store_page.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+class NewPage extends StatefulWidget {
+  const NewPage({Key? key}) : super(key: key);
 
-class newpage extends StatelessWidget {
-  const newpage({super.key});
+  @override
+  _NewPageState createState() => _NewPageState();
+}
+
+class _NewPageState extends State<NewPage> {
+  String? storeId; // Nullableに変更
+  String price = '';
+  String review = '';
+  double overallRating = 0.0;
+  double tasteRating = 0.0;
+  double hygieneRating = 0.0;
+  double atmosphereRating = 0.0;
+
+  void postReview() {
+    FirebaseFirestore.instance.collection('posts').add({
+      'storeid': storeId, // Nullableに変更
+      'discount': price,
+      'review': review,
+      'total': overallRating,
+      'taste': tasteRating,
+      'hygiene': hygieneRating,
+      'atmosphere': atmosphereRating,
+      'userid': "BVMyTOqbcwbhzmv2jQkB",
+    }).then((value) {
+      print('レビューが投稿されました！');
+    }).catchError((error) {
+      print('エラーが発生しました: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +76,6 @@ class newpage extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     height: 60,
                     width: 320,
-                    //color: Colors.yellow,
                     child: Text(
                       '登録したユーザー名とレビューはサービス上で公開されます',
                       style: TextStyle(
@@ -61,119 +87,121 @@ class newpage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 30),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Container(
-                    padding: EdgeInsets.all(40),
-                    height: 150,
-                    width: 240,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue, width: 5),
-                      borderRadius: BorderRadius.circular(20),
-                      //color: Colors.yellow,
-                    ),
-                    child: Icon(
-                      Icons.camera_alt_outlined,
-                      size: 60,
-                      color: const Color.fromARGB(217, 158, 158, 158),
-                    ),
+              Center(
+                child: Container(
+                  width: 320,
+                  child: FutureBuilder<QuerySnapshot>(
+                    future: FirebaseFirestore.instance.collection('stores').get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else {
+                        if (snapshot.hasData) {
+                          List<Map<String, dynamic>> stores = snapshot.data!.docs.map((doc) => {'id': doc.id, 'name': doc['name'] as String}).toList();
+                          return DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue, width: 3),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue, width: 3),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: '例 : ギュウカク',
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            value: storeId, // 修正点: 選択された店舗のIDをセットする
+                            items: stores.map((store) {
+                              return DropdownMenuItem<String>(
+                                value: store['id'],
+                                child: Text(store['name']),
+                              );
+                            }).toList(),
+                            onChanged: (String? value) {
+                              setState(() {
+                                storeId = value;
+                              });
+                            },
+                          );
+                        } else {
+                          return Text('No data available');
+                        }
+                      }
+                    },
                   ),
-                  Spacer(flex: 1)
-                ],
+                ),
               ),
               SizedBox(height: 15),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Text(
-                    '店名',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(flex: 8),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: '例 : ギュウカク',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                child: Center(
+                  child: Container(
+                    width: 320,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 3),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue, width: 3),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        hintText: '例 : 500円',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          price = value;
+                        });
+                      },
                     ),
                   ),
                 ),
               ),
               SizedBox(height: 15),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Text(
-                    '値段',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(flex: 8),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3, left: 20, right: 20),
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue, width: 3),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: '例 : 500円',
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Text(
-                    'レビュー',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Spacer(flex: 8),
-                ],
-              ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 3, left: 45, right: 45),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: '例 : おいしかったまた行きたい',
-                    border: InputBorder.none,
+                child: Container(
+                  width: 320, // 横幅を指定
+                  height: 300,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.blue, width: 3), // 枠線を追加
+                    borderRadius: BorderRadius.circular(10), // 角丸にする
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10), // テキストと枠線の間に余白を追加
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '例 : おいしかったまた行きたい',
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          review = value;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
+
+              SizedBox(height: 70,),
               Row(
                 children: [
+                  Spacer(
+                    flex: 1,
+                  ),
                   Column(
                     children: [
                       Text(
@@ -185,11 +213,13 @@ class newpage extends StatelessWidget {
                       RatingBar.builder(
                         itemBuilder: (context, index) => const Icon(
                           Icons.star,
-                          color: Colors.yellow,
+                          color: Colors.blue,
                         ),
                         itemSize: 30,
                         onRatingUpdate: (rating) {
-                          //評価が更新されたときの処理を書く
+                          setState(() {
+                            overallRating = rating;
+                          });
                         },
                       ),
                     ],
@@ -210,11 +240,13 @@ class newpage extends StatelessWidget {
                           RatingBar.builder(
                             itemBuilder: (context, index) => const Icon(
                               Icons.star,
-                              color: Colors.yellow,
+                              color: Colors.blue,
                             ),
                             itemSize: 20,
                             onRatingUpdate: (rating) {
-                              //評価が更新されたときの処理を書く
+                              setState(() {
+                                tasteRating = rating;
+                              });
                             },
                           ),
                         ],
@@ -222,7 +254,7 @@ class newpage extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '衛星',
+                            '衛生',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -230,11 +262,13 @@ class newpage extends StatelessWidget {
                           RatingBar.builder(
                             itemBuilder: (context, index) => const Icon(
                               Icons.star,
-                              color: Colors.yellow,
+                              color: Colors.blue,
                             ),
                             itemSize: 20,
                             onRatingUpdate: (rating) {
-                              //評価が更新されたときの処理を書く
+                              setState(() {
+                                hygieneRating = rating;
+                              });
                             },
                           ),
                         ],
@@ -250,11 +284,13 @@ class newpage extends StatelessWidget {
                           RatingBar.builder(
                             itemBuilder: (context, index) => const Icon(
                               Icons.star,
-                              color: Colors.yellow,
+                              color: Colors.blue,
                             ),
                             itemSize: 20,
                             onRatingUpdate: (rating) {
-                              //評価が更新されたときの処理を書く
+                              setState(() {
+                                atmosphereRating = rating;
+                              });
                             },
                           ),
                         ],
@@ -266,26 +302,23 @@ class newpage extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(height: 20),
-              SliderWidget(),
               SizedBox(
-                height: 20,
+                height: 50,
               ),
               Row(
                 children: [
                   Spacer(flex: 1),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 74, 110, 255),
-                      elevation: 10,
-                    ),
-                    onPressed: () {},
+                    onPressed: () {
+                      postReview(); // レビューを投稿するメソッドを呼び出します
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       'レビューを投稿',
                       style: TextStyle(
-                        color: const Color.fromARGB(255, 255, 255, 255),
+                        color: Colors.blue,
                         fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -296,49 +329,6 @@ class newpage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class SliderWidget extends StatefulWidget {
-  @override
-  _SliderWidgetState createState() => _SliderWidgetState();
-}
-class _SliderWidgetState extends State<SliderWidget> {
-  double _value = 0.0; // スライダーの現在の値
-
-    @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '1人', // 最小値のラベル
-              style: TextStyle(fontSize: 18),
-            ),
-            Text(
-              '複数', // 最大値のラベル
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-        SizedBox(height: 10), // スペースを追加
-        Slider(
-          value: _value,
-          min: 0.0,
-          max: 100.0,
-          divisions: 10,
-          onChanged: (double newValue) {
-            setState(() {
-              _value = newValue;
-            });
-          },
-        ),
-        SizedBox(height: 10), // スペースを追加
-      ],
     );
   }
 }
