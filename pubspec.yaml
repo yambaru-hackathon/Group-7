@@ -30,10 +30,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod:
-  google_fonts:
+  permission_handler: ^11.3.0
+  google_maps_flutter: ^2.6.0
+  google_place: ^0.4.3
+  geocoding: ^2.0.1
+  geolocator: ^8.2.1
+  flutter_riverpod: ^2.0.3
+  google_fonts: ^4.0.4
+  flutter_polyline_points: ^1.0.0
   url_launcher:
   flutter_rating_bar: ^4.0.1
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -48,8 +55,7 @@ dependencies:
   
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  # flutter_test:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
