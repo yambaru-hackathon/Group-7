@@ -205,7 +205,7 @@ class Mypage extends ConsumerWidget {
                     SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(260,33),
+                        fixedSize: const Size(220,33),
                         backgroundColor: const Color(0xFFD9D9D9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7),
@@ -233,8 +233,6 @@ class Mypage extends ConsumerWidget {
                         ),
                       ),
                       onPressed: () {
-
-
                       },
                       child: Center(
                         child: Icon(
