@@ -1,32 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gyuukaku/service.dart';
 
-  final img = [
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",    
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",
-  ];
-// このコードでは、Stackウィジェットを使用して、ブックマークリストボタンが押されたときにオーバーレイを表示しています。オーバーレイは_isOverlayVisible変数によって制御され、_toggleOverlayメソッドを使用して状態を切り替えます。
-class Mypage extends StatefulWidget {
+
+final imgProvider = FutureProvider<List<String>>((ref) async {
+  final service = ref.read(serviceProvider);
+  return service.readUserPostImages(usersID); // readUserPostImages 関数を呼び出す
+});
+
+var usersID = 'BVMyTOqbcwbhzmv2jQkB';
+
+final nameProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final userData = await service.read_user(usersID);
+  return userData != null ? userData[0] : '';
+});
+
+final likedProvider = FutureProvider<int>((ref) async {
+  final service = ref.read(serviceProvider);
+  final userData = await service.read_user(usersID);
+  return userData != null ? int.tryParse(userData[1]) ?? 0 : 0;
+});
+
+final profileURLProvider = FutureProvider<String>((ref) async {
+  final service = ref.read(serviceProvider);
+  final userData = await service.read_user(usersID);
+  return userData != null ? userData[2] : '';
+});
+
+final overlayVisibleProvider = StateNotifierProvider<OverlayVisibleNotifier, bool>((ref) => OverlayVisibleNotifier());
+
+final serviceProvider = Provider<FirestoreService>((_) => FirestoreService());
+
+class OverlayVisibleNotifier extends StateNotifier<bool> {
+  OverlayVisibleNotifier() : super(false);
+
+  void toggleOverlay() {
+    state = !state;
+  }
+}
+
+class Mypage extends ConsumerWidget {
   Mypage({Key? key}) : super(key: key);
 
   @override
-  _MypageState createState() => _MypageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final overlayVisible = ref.watch(overlayVisibleProvider);
+    final nameAsyncValue = ref.watch(nameProvider);
+    final likedAsyncValue = ref.watch(likedProvider);
+    final profileURLValue = ref.watch(profileURLProvider);
+    final imgList = ref.watch(imgProvider);
 
-class _MypageState extends State<Mypage> {
-  bool _isOverlayVisible = false;
+    final profileURL =             
+    profileURLValue.when(
+    data: (data) => data,
+    loading: () => '', // データがロード中の場合のデフォルト値
+    error: (_, __) => '', // エラーが発生した場合のデフォルト値
+    );
 
-  void _toggleOverlay() {
-    setState(() {
-      _isOverlayVisible = !_isOverlayVisible;
-    });
-  }
+    final isLoading = profileURLValue.maybeWhen(
+    loading: () => true, // ローディング中の場合 true を返す
+    orElse: () => false, // それ以外の場合は false を返す
+    );
 
-  @override
-  Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -35,23 +72,37 @@ class _MypageState extends State<Mypage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset('images/Kapsel.png'),
+                Visibility(
+                  visible: isLoading, // ローディング中の場合には true を返し、ローディングインジケーターを表示
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                Visibility(
+                  visible: !isLoading, // ローディング中ではない場合には true を返し、画像を表示
+                  child: Image.network(
+                    profileURL,
+                    fit: BoxFit.cover, //ここ注意
+                  ),
+                ),
                 SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 15,),
+                    SizedBox(width: 15),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'ユーザーネーム',
+                          nameAsyncValue.when(
+                            data: (data) => data,
+                            loading: () => '', // データがロード中の場合のデフォルト値
+                            error: (_, __) => '', // エラーが発生した場合のデフォルト値
+                          ),
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        SizedBox(height: 2,),
+                        SizedBox(height: 2),
                         Row(
                           children: [
                             Text(
@@ -62,7 +113,7 @@ class _MypageState extends State<Mypage> {
                                 color: const Color(0xFF4992FF),
                               ),
                             ),
-                            SizedBox(width: 8,),
+                            SizedBox(width: 8),
                             Text(
                               '#ダイエットは明日から',
                               style: TextStyle(
@@ -75,7 +126,7 @@ class _MypageState extends State<Mypage> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 2,),
+                    Spacer(flex: 2),
                     Column(
                       children: [
                         Container(
@@ -87,7 +138,11 @@ class _MypageState extends State<Mypage> {
                           ),
                           child: Center(
                             child: Text(
-                              '213',
+                              likedAsyncValue.when(
+                                data: (data) => data.toString(),
+                                loading: () => '', // データがロード中の場合のデフォルト値
+                                error: (_, __) => '', // エラーが発生した場合のデフォルト値
+                              ),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -97,7 +152,7 @@ class _MypageState extends State<Mypage> {
                           ),
                         ),
                         Text(
-                          'いいね！',
+                          'いいね',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -106,7 +161,7 @@ class _MypageState extends State<Mypage> {
                         ),
                       ],
                     ),
-                    Spacer(flex: 1,),
+                    Spacer(flex: 1),
                     Column(
                       children: [
                         Container(
@@ -118,7 +173,11 @@ class _MypageState extends State<Mypage> {
                           ),
                           child: Center(
                             child: Text(
-                              '9',
+                                imgList.when(
+                                  data: (imgList) => imgList.length.toString(), // データが利用可能になったらリストの要素数を取得する
+                                  loading: () => '', // ローディング中は要素数を 0 とする
+                                  error: (_, __) => '', // エラーが発生した場合も要素数を 0 とする
+                                ),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -137,13 +196,13 @@ class _MypageState extends State<Mypage> {
                         ),
                       ],
                     ),
-                    SizedBox(width: 15,),
+                    SizedBox(width: 15),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Row(
                   children: [
-                    SizedBox(width: 15,),
+                    SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         fixedSize: const Size(260,33),
@@ -152,7 +211,9 @@ class _MypageState extends State<Mypage> {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: _toggleOverlay,
+                      onPressed: () {
+                        ref.read(overlayVisibleProvider.notifier).toggleOverlay();
+                      },
                       child: Text(
                         'ブックマークリスト',
                         style: TextStyle(
@@ -171,18 +232,21 @@ class _MypageState extends State<Mypage> {
                           borderRadius: BorderRadius.circular(7),
                         ),
                       ),
-                      onPressed: () { /* ボタンがタップされた時の処理 */ },
+                      onPressed: () {
+
+
+                      },
                       child: Center(
                         child: Icon(
-                          Icons.ios_share,
+                          Icons.share,
                           color: const Color(0xFF4992FF),
                         ),
-                      )
+                      ),
                     ),
-                    SizedBox(width: 15,),
+                    SizedBox(width: 15),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Container(
                   width: double.infinity,
                   height: 6,
@@ -191,21 +255,37 @@ class _MypageState extends State<Mypage> {
                 MediaQuery.removePadding(
                   context: context,
                   removeTop: true,
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: 3,
-                    children: img.map((img) {
-                      return InstagramPostItem(img: img);
-                    }).toList(),
-                  )
+                  child: Consumer(builder: (context, watch, child) {
+                    final imgListAsyncValue = ref.watch(imgProvider); // imgProvider の値を取得
+
+                    return imgListAsyncValue.when(
+                      data: (imgList) {
+                        return GridView.count(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisCount: 3,
+                          children: imgList.map((img) {
+                            return InstagramPostItem(img: img);
+                          }).toList(),
+                        );
+                      },
+                      loading: () {
+                        return Center(child: CircularProgressIndicator());
+                      },
+                      error: (error, stackTrace) {
+                        return Text('Error: $error');
+                      },
+                    );
+                  }),
                 )
               ],
             ),
           ),
-          if (_isOverlayVisible)
+          if (overlayVisible)
             GestureDetector(
-              onTap: _toggleOverlay,
+              onTap: () {
+                ref.read(overlayVisibleProvider.notifier).toggleOverlay();
+              },
               child: Container(
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
@@ -213,16 +293,16 @@ class _MypageState extends State<Mypage> {
                     width: 300,
                     height: 630,
                     decoration: BoxDecoration(
-                          color:  Colors.white,
-                          borderRadius: BorderRadius.circular(44),
-                          border: Border.all(
-                          color: Colors.black,
-                          width: 4),
-                        ),
-                    child: 
-                    Column(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(44),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 4,
+                      ),
+                    ),
+                    child: Column(
                       children: [
-                        SizedBox(height: 30,),
+                        SizedBox(height: 30),
                         Container(
                           width: 240,
                           height: 35,
@@ -241,16 +321,35 @@ class _MypageState extends State<Mypage> {
                             ),
                           ),
                         ),
-                        GridView.count(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          crossAxisCount: 3,
-                          children: img.map((img) {
-                        return InstagramPostItem(img: img);
-                          }).toList(),
-                        ),
+                        SizedBox(height: 20,),
+                      MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: Consumer(builder: (context, watch, child) {
+                          final imgListAsyncValue = ref.watch(imgProvider); // imgProvider の値を取得
+
+                          return imgListAsyncValue.when(
+                            data: (imgList) {
+                              return GridView.count(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                crossAxisCount: 3,
+                                children: imgList.map((img) {
+                                  return InstagramPostItem(img: img);
+                                }).toList(),
+                              );
+                            },
+                            loading: () {
+                              return Center(child: CircularProgressIndicator());
+                            },
+                            error: (error, stackTrace) {
+                              return Text('Error: $error');
+                            },
+                          );
+                        }),
+                      )
                       ],
-                    )
+                    ),
                   ),
                 ),
               ),
@@ -262,7 +361,7 @@ class _MypageState extends State<Mypage> {
 }
 
 class InstagramPostItem extends StatelessWidget {
-  const InstagramPostItem({Key? key,required this.img}) : super(key: key);
+  const InstagramPostItem({Key? key, required this.img}) : super(key: key);
 
   final String img;
 
@@ -270,9 +369,9 @@ class InstagramPostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // 画像が押された時の処理
+        // 画像がタップされた時の処理
       },
-      child: Image.asset(
+      child: Image.network(
         img,
         fit: BoxFit.cover,
       ),
