@@ -70,7 +70,7 @@ class Root extends ConsumerWidget {
     // ignore: non_constant_identifier_names
     final Pages = [
       const Sarch(),
-      const Map(),
+      Map(),
       Mypage(),
     ];
 
