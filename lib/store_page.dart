@@ -91,14 +91,16 @@ final openProvider = FutureProvider<String>((ref) async {
   return storeData != null ? storeData[10] : '';
 });
 
-
-
-
-
-
-
 class Sarch extends ConsumerWidget {
-  Sarch({Key? key}) : super(key: key);
+  // final String storeID; // storeID 引数を追加
+
+  // Sarch({Key? key, required this.storeID}) : super(key: key);
+
+  //   String getStoreID() {
+  //   return storeID;
+  // }
+
+  Sarch({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -237,9 +239,6 @@ class Sarch extends ConsumerWidget {
 //   itemCount: 5,
 //   unratedColor: Colors.blue[100],
 // ),
-
-
-
 
                     Row(
                       children: [
