@@ -6,14 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-  final img = [
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",    
-    "images/desk.png",
-    "images/bird.png",
-    "images/mofuo.png",
-  ];
 
   final imgProvider = FutureProvider<List<String>>((ref) async {
   final service = ref.read(serviceProvider);
@@ -345,7 +337,7 @@ class Sarch extends ConsumerWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '9',
+                            '1',
                             style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

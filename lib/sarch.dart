@@ -92,6 +92,7 @@ Future<LatLng?> getLatLngFromStoreID(String storeID) async {
         if (storeNameSnapshot.hasError) {
           return Text('エラー：${storeNameSnapshot.error}');
         }
+        int totalStars = (userMap['total'] ?? 0).toInt();
 
         // Firestoreからの店舗名の取得が完了した後に、UserWidgetを構築する
         return Padding(
@@ -125,12 +126,12 @@ Future<LatLng?> getLatLngFromStoreID(String storeID) async {
                       ),
                     ),
                     SizedBox(width: 10),
-                    for (int i = 0; i < 5; i++) // 5つの星を表示する
-                      Icon(
-                        Icons.star,
-                        size: 20,
-                        color: Colors.blue,
-                      ),
+      for (int i = 0; i < totalStars; i++) // 固定の5つの代わりにtotalStarsを使用
+        Icon(
+          Icons.star,
+          size: 20,
+          color: Colors.blue,
+        ),
                     Spacer(),
                     Text(
                       '¥${userMap['discount']}',

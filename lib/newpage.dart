@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class NewPage extends StatefulWidget {
   const NewPage({Key? key}) : super(key: key);
@@ -17,22 +19,45 @@ class _NewPageState extends State<NewPage> {
   double tasteRating = 0.0;
   double hygieneRating = 0.0;
   double atmosphereRating = 0.0;
+  File? _image;
 
-  void postReview() {
-    FirebaseFirestore.instance.collection('posts').add({
-      'storeid': storeId, // Nullableに変更
-      'discount': price,
-      'review': review,
-      'total': overallRating,
-      'taste': tasteRating,
-      'hygiene': hygieneRating,
-      'atmosphere': atmosphereRating,
-      'userid': "BVMyTOqbcwbhzmv2jQkB",
-    }).then((value) {
-      print('レビューが投稿されました！');
-    }).catchError((error) {
-      print('エラーが発生しました: $error');
-    });
+  // 画像を選択するメソッド
+  Future<void> _getImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        _image = File(pickedImage.path);
+      });
+    }
+  }
+
+  // 画像を表示するウィジェット
+  Widget _buildImagePreview() {
+    return _image != null
+        ? Image.file(
+            _image!,
+            width: 200,
+            height: 200,
+            fit: BoxFit.cover,
+          )
+        : InkWell(
+            onTap: _getImage,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                Icons.camera_alt,
+                size: 50,
+                color: Colors.grey[400],
+              ),
+            ),
+          );
   }
 
   @override
@@ -90,49 +115,55 @@ class _NewPageState extends State<NewPage> {
               Center(
                 child: Container(
                   width: 320,
-                  child: FutureBuilder<QuerySnapshot>(
-                    future: FirebaseFirestore.instance.collection('stores').get(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else {
-                        if (snapshot.hasData) {
-                          List<Map<String, dynamic>> stores = snapshot.data!.docs.map((doc) => {'id': doc.id, 'name': doc['name'] as String}).toList();
-                          return DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 3),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 3),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText: '例 : ギュウカク',
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            value: storeId, // 修正点: 選択された店舗のIDをセットする
-                            items: stores.map((store) {
-                              return DropdownMenuItem<String>(
-                                value: store['id'],
-                                child: Text(store['name']),
+                  child: Column(
+                    children: [
+                      _buildImagePreview(), // 画像プレビューウィジェットを追加
+                      SizedBox(height: 20),
+                      FutureBuilder<QuerySnapshot>(
+                        future: FirebaseFirestore.instance.collection('stores').get(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else {
+                            if (snapshot.hasData) {
+                              List<Map<String, dynamic>> stores = snapshot.data!.docs.map((doc) => {'id': doc.id, 'name': doc['name'] as String}).toList();
+                              return DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue, width: 3),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue, width: 3),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: '例 : ギュウカク',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                value: storeId, // 修正点: 選択された店舗のIDをセットする
+                                items: stores.map((store) {
+                                  return DropdownMenuItem<String>(
+                                    value: store['id'],
+                                    child: Text(store['name']),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    storeId = value;
+                                  });
+                                },
                               );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              setState(() {
-                                storeId = value;
-                              });
-                            },
-                          );
-                        } else {
-                          return Text('No data available');
-                        }
-                      }
-                    },
+                            } else {
+                              return Text('No data available');
+                            }
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -331,4 +362,35 @@ class _NewPageState extends State<NewPage> {
       ),
     );
   }
+
+  void postReview() {
+    FirebaseFirestore.instance.collection('posts').add({
+      'storeid': storeId, // Nullableに変更
+      'discount': price,
+      'review': review,
+      'total': overallRating.toInt(),
+      'taste': tasteRating,
+      'hygiene': hygieneRating,
+      'atmosphere': atmosphereRating,
+      'userid': "BVMyTOqbcwbhzmv2jQkB",
+      'image':'https://firebasestorage.googleapis.com/v0/b/group7-71de2.appspot.com/o/post_image%2F3.jpg?alt=media&token=715596b7-5a8f-446b-9387-b6b2ff9478a2',
+    }).then((value) {
+      print('レビューが投稿されました！');
+      String postId = value.id; // 新しいドキュメントのIDを取得
+      addToMyPosts(postId); // レビューをユーザーのマイポストに追加
+    }).catchError((error) {
+      print('エラーが発生しました: $error');
+    });
+  }
+
+  void addToMyPosts(String postId) {
+    FirebaseFirestore.instance.collection('users').doc('BVMyTOqbcwbhzmv2jQkB').update({
+      'mypost': FieldValue.arrayUnion([postId]), // 新しいpostIdを配列に追加する
+    }).then((value) {
+      print('配列に追加されました！');
+    }).catchError((error) {
+      print('エラーが発生しました: $error');
+    });
+  }
 }
+
